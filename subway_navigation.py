@@ -1,5 +1,5 @@
 import copy
-import sys
+
 
 class Matrix:
     def __init__(self, data=None, dim=None, init_value=0):
@@ -12,12 +12,18 @@ class Matrix:
                 for i in range(len(data)):
                     if i == 0:
                         if not isinstance(data[i], list):
-                            raise TypeError("1-3: All the elements in 'data' should be a list")
+                            raise TypeError(
+                                "1-3: All the elements in 'data' should be a list"
+                            )
                         else:
                             continue
                     else:
-                        if (not isinstance(data[i], list)) or (len(data[i]) != len(data[i-1])):
-                            raise TypeError("1-4: All the elements in 'data' should be a list and they must have the same lenth to be a matrix")
+                        if (not isinstance(data[i], list)) or (
+                            len(data[i]) != len(data[i - 1])
+                        ):
+                            raise TypeError(
+                                "1-4: All the elements in 'data' should be a list and they must have the same lenth to be a matrix"
+                            )
                         else:
                             continue
             if len(data) == 0:
@@ -62,7 +68,7 @@ class Matrix:
         if len(self.data) != len(self.data[0]):
             return ValueError("11-4: Only square matrix can be exponentiated")
         res = Matrix(data=self.data)
-        for _ in range(n-1):
+        for _ in range(n - 1):
             res = res * self
             res = Matrix(data=res.data)
         return res
@@ -94,6 +100,7 @@ class Matrix:
                 new_row.append(new_ele)
             res.append(new_row)
         return Matrix(data=res)
+
 
 class Graph:
     def __init__(self, data=[]):
@@ -143,19 +150,21 @@ class Graph:
 
     def find_shortest_path_CPX(self, start, end):
         vertices_count = len(self.data)
-        if start == end: return [start]
+        if start == end:
+            return [start]
         adj_matrix = Matrix(copy.deepcopy(self.data))
         matrices = [Matrix(copy.deepcopy(self.data))]
         found = False
-        limit = 10 
-        
+        limit = 10
+
         for i in range(limit):
             if matrices[-1].data[start][end] != 0:
                 found = True
                 break
             matrices.append(matrices[-1] * adj_matrix)
-        
-        if not found: return None
+
+        if not found:
+            return None
         return ["Path exists (Computed via Matrix Power)"]
 
     def find_shortest_path_BFS(self, start, end):
@@ -178,8 +187,10 @@ class Graph:
                     if i == end:
                         found = True
                         break
-            if found: break
-        if not found: return None
+            if found:
+                break
+        if not found:
+            return None
         path = []
         index = end
         while index is not None:
@@ -202,7 +213,8 @@ class Graph:
                 if mat[curr][i] != 0 and i not in memory:
                     memory[i] = curr
                     stack.append(i)
-        if not found: return None
+        if not found:
+            return None
         path = []
         curr_node = end
         while curr_node is not None:
@@ -212,19 +224,21 @@ class Graph:
 
     def find_shortest_path_weight(self, start, end):
         vertices_count = len(self.data)
-        distances = {i: float('inf') for i in range(vertices_count)}
+        distances = {i: float("inf") for i in range(vertices_count)}
         distances[start] = 0
         visited = [False] * vertices_count
         parent = {start: None}
         for _ in range(vertices_count):
-            min_dist = float('inf')
+            min_dist = float("inf")
             curr = -1
             for i in range(vertices_count):
                 if not visited[i] and distances[i] < min_dist:
                     min_dist = distances[i]
                     curr = i
-            if curr == -1 or distances[curr] == float('inf'): break
-            if curr == end: break
+            if curr == -1 or distances[curr] == float("inf"):
+                break
+            if curr == end:
+                break
             visited[curr] = True
             for i in range(vertices_count):
                 weight = self.data[curr][i]
@@ -233,7 +247,8 @@ class Graph:
                     if new_dist < distances[i]:
                         distances[i] = new_dist
                         parent[i] = curr
-        if end not in parent: return None, float('inf')
+        if end not in parent:
+            return None, float("inf")
         path = []
         curr_node = end
         while curr_node is not None:
@@ -243,7 +258,7 @@ class Graph:
 
     def minimum_spanning_tree_prim(self, weights):
         n = len(weights)
-        INF = float('inf')
+        INF = float("inf")
         key = [INF] * n
         parent = [None] * n
         mst_set = [False] * n
@@ -256,7 +271,8 @@ class Graph:
                 if not mst_set[v] and key[v] < min_val:
                     min_val = key[v]
                     u = v
-            if u == -1: break
+            if u == -1:
+                break
             mst_set[u] = True
             for v in range(n):
                 w = weights[u][v]
@@ -325,6 +341,7 @@ class Graph:
                                 return False
         return True
 
+
 subway_data_source = {
     "1号线八通线": "苹果园-3-古城-2-八角游乐园-2-八宝山-2-玉泉路-2-五棵松-2-万寿路-2-公主坟-2-军事博物馆-2-木樨地-2-南礼士路-2-复兴门-2-西单-2-天安门西-2-天安门东-2-王府井-2-东单-2-建国门-2-永安里-2-国贸-2-大望路-2-四惠-2-四惠东-3-高碑店-2-传媒大学-2-双桥-2-管庄-2-八里桥-3-通州北苑-2-果园-2-九棵树-2-梨园-2-临河里-2-土桥-2-花庄-2-环球度假区",
     "2号线(内环/外环)": "西直门-2-积水潭-2-鼓楼大街-2-安定门-2-雍和宫-2-东直门-2-东四十条-2-朝阳门-2-建国门-2-北京站-2-崇文门-2-前门-2-和平门-2-宣武门-2-长椿街-2-复兴门-2-阜成门-2-车公庄-2-西直门",
@@ -352,21 +369,22 @@ subway_data_source = {
     "昌平线": "西土城-2-学院桥-2-六道口-2-清河小营桥-2-学知园-2-六道口-2-上清桥-3-清河站-4-西二旗-5-生命科学园-4-朱辛庄-3-巩华城-4-沙河-3-沙河高教园-3-南邵-3-北邵洼-4-昌平东关-2-昌平-2-十三陵景区-3-昌平西山口",
     "大兴机场线": "草桥-19-大兴新城-20-大兴机场",
     "首都机场线": "北新桥-3-东直门-20-三元桥-20-3号航站楼-5-2号航站楼-15-三元桥",
-    "西郊线": "巴沟-3-颐和园西门-3-茶棚-2-万安-3-植物园-3-香山"
+    "西郊线": "巴沟-3-颐和园西门-3-茶棚-2-万安-3-植物园-3-香山",
 }
+
 
 class BeijingSubwaySystem:
     def __init__(self):
         print("Initializing Beijing Subway Network Data...")
         self.stations = set()
         self.edges = []
-        
-        self.hell_stations = {"西直门", "东直门", "国贸", "望京西","平安里"}
+
+        self.hell_stations = {"西直门", "东直门", "国贸", "望京西", "平安里"}
 
         for line, path in subway_data_source.items():
             parts = path.split("-")
             for i in range(0, len(parts) - 2, 2):
-                u, t, v = parts[i], int(parts[i+1]), parts[i+2]
+                u, t, v = parts[i], int(parts[i + 1]), parts[i + 2]
                 self.stations.add(u)
                 self.stations.add(v)
                 self.edges.append((u, v, t))
@@ -375,15 +393,17 @@ class BeijingSubwaySystem:
         self.n = len(self.sorted_stations)
         self.name_to_idx = {name: i for i, name in enumerate(self.sorted_stations)}
         self.idx_to_name = {i: name for i, name in enumerate(self.sorted_stations)}
-        
+
         matrix_data = [[0] * self.n for _ in range(self.n)]
         for u, v, t in self.edges:
             ui, vi = self.name_to_idx[u], self.name_to_idx[v]
             matrix_data[ui][vi] = t
             matrix_data[vi][ui] = t
-            
+
         self.graph = Graph(matrix_data)
-        print(f"Initialization Complete! Loaded {self.n} stations and {self.graph.count_edges() // 2} track segments.")
+        print(
+            f"Initialization Complete! Loaded {self.n} stations and {self.graph.count_edges() // 2} track segments."
+        )
 
     def get_station_id(self, name):
         return self.name_to_idx.get(name)
@@ -392,14 +412,16 @@ class BeijingSubwaySystem:
         if not path_indices:
             print("No path found.")
             return
-        
+
         names = [self.idx_to_name[i] for i in path_indices]
         if detail_type == "simple":
             print(" -> ".join(names))
-        
+
         detected_hell_stations = [name for name in names if name in self.hell_stations]
         if detected_hell_stations:
-            print(f"This route involves stations known for difficult, long, or crowded transfers: {', '.join(detected_hell_stations)}")
+            print(
+                f"This route involves stations known for difficult, long, or crowded transfers: {', '.join(detected_hell_stations)}"
+            )
             print("Please prepare for long walks or stairs.")
             print("This route may not be the best route in real life.")
 
@@ -407,9 +429,9 @@ class BeijingSubwaySystem:
 
     def run_interactive(self):
         while True:
-            print("\n" + "="*50)
+            print("\n" + "=" * 50)
             print("   Beijing Subway Graph Navigation System")
-            print("="*50)
+            print("=" * 50)
             print("1. [Dijkstra] Fastest Route (Time Weighted)")
             print("2. [BFS] Least Stops Route")
             print("3. [DFS] Random Exploration Path")
@@ -419,26 +441,30 @@ class BeijingSubwaySystem:
             print("7. [Components] Check Network Connectivity")
             print("8. [Simulation] Simulate Line Disruption (Remove Edge)")
             print("0. Exit")
-            print("="*50)
-            
+            print("=" * 50)
+
             choice = input("Enter option number: ")
-            
-            if choice == '0':
+
+            if choice == "0":
                 break
-                
-            elif choice in ['1', '2', '3', '6']:
+
+            elif choice in ["1", "2", "3", "6"]:
                 start_name = input("Enter start station (e.g., 西直门): ")
                 end_name = input("Enter end station (e.g., 国贸): ")
-                
+
                 s_id = self.get_station_id(start_name)
                 e_id = self.get_station_id(end_name)
-                
+
                 if s_id is None or e_id is None:
-                    print("Error: Station name does not exist. Please check your input.")
+                    print(
+                        "Error: Station name does not exist. Please check your input."
+                    )
                     continue
-                
-                if choice == '1':
-                    print(f"\nCalculating fastest route from {start_name} to {end_name} (Dijkstra)...")
+
+                if choice == "1":
+                    print(
+                        f"\nCalculating fastest route from {start_name} to {end_name} (Dijkstra)..."
+                    )
                     path, time = self.graph.find_shortest_path_weight(s_id, e_id)
                     if path:
                         print(f"Estimated Time: {time} minutes")
@@ -447,29 +473,35 @@ class BeijingSubwaySystem:
                     else:
                         print("Destination unreachable.")
 
-                elif choice == '2':
-                    print(f"\nCalculating route with fewest stops from {start_name} to {end_name} (BFS)...")
+                elif choice == "2":
+                    print(
+                        f"\nCalculating route with fewest stops from {start_name} to {end_name} (BFS)..."
+                    )
                     path = self.graph.find_shortest_path_BFS(s_id, e_id)
                     if path:
                         print(f"Total Stops: {len(path)} stations")
                         self.print_path(path)
 
-                elif choice == '3':
+                elif choice == "3":
                     print(f"\nSearching for a feasible path (DFS)...")
                     path = self.graph.find_path_DFS(s_id, e_id)
                     self.print_path(path)
 
-                elif choice == '6':
-                    print(f"\n[Experimental] Computing path via Matrix Multiplication (CPX)...")
+                elif choice == "6":
+                    print(
+                        f"\n[Experimental] Computing path via Matrix Multiplication (CPX)..."
+                    )
                     res = self.graph.find_shortest_path_CPX(s_id, e_id)
                     print(f"CPX Result: {res}")
 
-            elif choice == '4':
+            elif choice == "4":
                 print("\nCalculating Minimum Spanning Tree (Prim's Algorithm)...")
                 mst, cost = self.graph.minimum_spanning_tree_prim(self.graph.data)
-                print(f"Minimum weighted length to connect all {self.n} stations: {cost}")
+                print(
+                    f"Minimum weighted length to connect all {self.n} stations: {cost}"
+                )
 
-            elif choice == '5':
+            elif choice == "5":
                 name = input("Enter station name to query: ")
                 sid = self.get_station_id(name)
                 if sid is not None:
@@ -483,8 +515,8 @@ class BeijingSubwaySystem:
                         print("- Verdict: This is a Transfer Hub.")
                     else:
                         print("- Verdict: Regular Stop.")
-            
-            elif choice == '7':
+
+            elif choice == "7":
                 print("\nAnalyzing network structure...")
                 is_connected = self.graph.connectness()
                 components = self.graph.connect_components()
@@ -492,12 +524,12 @@ class BeijingSubwaySystem:
                 print(f"Number of Connected Components: {len(components)}")
                 if not is_connected:
                     print("Warning: Isolated station groups detected!")
-                
+
                 print("\nChecking Bipartite Property (BFS)...")
                 is_bi = self.graph.is_bipartite_BFS()
                 print(f"Is Bipartite Graph: {is_bi}")
 
-            elif choice == '8':
+            elif choice == "8":
                 print("\nSimulating Construction/Failure Mode...")
                 u_name = input("Enter disruption start station: ")
                 v_name = input("Enter disruption end station: ")
@@ -507,11 +539,12 @@ class BeijingSubwaySystem:
                     self.graph.remove_edge(u, v)
                     self.graph.remove_edge(v, u)
                     print("Line segment disrupted. Please replan route to see effects.")
-            
+
             else:
                 print("Invalid input.")
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     subway_system = BeijingSubwaySystem()
     try:
         subway_system.run_interactive()
